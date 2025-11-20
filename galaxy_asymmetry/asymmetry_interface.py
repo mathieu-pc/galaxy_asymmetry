@@ -2,6 +2,8 @@
 This file handles the interface of asymmetry between input data and the main computation.
 """
 import numpy as np
+from astropy import units
+from astropy.units import quantity_input
 from .array_utils import fill_around
 from .asymmetry_computation import compute_asymmetry_probability
 
@@ -10,10 +12,12 @@ ASYMMETRY_RESOLUTION = 100
 ASYMMETRY_RANGE = np.arange(0, 1 + 1 / ASYMMETRY_RESOLUTION, 1 / ASYMMETRY_RESOLUTION)
 
 
+@quantity_input(beam_FWHM = units.pixel)
 def _get_beam_factor(beam_FWHM):
-	beam_f = np.copy(beam_FWHM)
-	beam_f[beam_FWHM < 1] = 1
-	return np.prod(beam_f)
+	beam_f = (np.copy(beam_FWHM) / units.pixel).decompose().value
+	beam_f[beam_f < 1] = 1
+	beam_f = np.prod(beam_f)
+	return beam_f
 
 
 def _make_expanded_data(data, mask, center):
@@ -25,6 +29,7 @@ def _make_expanded_data(data, mask, center):
 	return even_symmetric_data, anti_symmetric_data
 
 
+@quantity_input(beam_FWHM = units.pixel)
 def compute_reduced_magnitude(data, noise_RMS, beam_FWHM, counting = 2):
 	"""
 	Returns the reduced magnitude of data according to statistical significance
@@ -76,6 +81,7 @@ def compute_asymmetry_from_data(data, mask, noise_RMS, center):
 	return A
 
 
+@quantity_input(beam_FWHM = units.pixel)
 def compute_asymmetry_probability_from_data(data, mask, noise_RMS, center, beam_FWHM, **kwargs):
 	"""
 	Compute the asymmetry probability for input data

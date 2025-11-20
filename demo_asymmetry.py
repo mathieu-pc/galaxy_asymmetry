@@ -1,6 +1,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
 from astropy.io import fits
+from astropy import units
 from scipy.ndimage import gaussian_filter
 #======================
 import galaxy_asymmetry
@@ -10,15 +11,16 @@ FWHM_TO_SIGMA = 1 / SIGMA_TO_FWHM
 
 
 source  = fits.open("demo_asymmetry_source.fits")[0].data
-beam_FWHM = np.array([5, 5]) #beam FWHM specified in pixel units
+beam_FWHM = np.array([5, 5]) * units.pixel #beam FWHM specified in pixel units
 
 #The source is noiseless, so we make our own noise cube
 def make_noise_cube(noise_RMS, psf_FWHM, shape):
 	psf_sigma = np.zeros(len(shape))
-	psf_sigma[1:] = FWHM_TO_SIGMA * psf_FWHM
+	psf_sigma[1:] = FWHM_TO_SIGMA * (psf_FWHM / units.pixel).decompose().value
 	noise_cube = gaussian_filter(np.random.normal(size = shape), sigma = psf_sigma, mode = 'wrap')
 	noise_cube *= noise_RMS * np.sqrt(noise_cube.size) / np.linalg.norm(noise_cube)
 	return noise_cube
+
 #For example, we set the noise as 1/10 the maximum signal of the source
 noise_RMS = np.max(source) / 10 
 source += make_noise_cube(noise_RMS, beam_FWHM, source.shape)
