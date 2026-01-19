@@ -4,3 +4,4 @@ from .asymmetry_interface import compute_asymmetry_probability_from_data
 from .asymmetry_interface import compute_asymmetry_from_data
 from .asymmetry_interface import compute_reduced_magnitude
 from .asymmetry_interface import ASYMMETRY_RANGE
+from .probability_standard_deviation import get_mode_standard_deviations, get_mean_standard_deviations

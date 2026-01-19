@@ -82,8 +82,8 @@ def compute_asymmetry_probability(a, X, Y, N, n_m = 4000, step = 0.01, *, voice 
 	norm = np.nansum(PA)
 	if norm != 0:
 		return PA/norm
-	return PA
 	A2 = (Y**2-N) / (X**2-N)
+	print(A2)
 	if voice:
 		print("Failed to recover from chi square.")
 		print(X, Y, N, A2)

@@ -47,6 +47,8 @@ p_a = galaxy_asymmetry.compute_asymmetry_probability_from_data(
 	center,
 	beam_FWHM
 )
+a0, sigmas = galaxy_asymmetry.get_mean_standard_deviations(galaxy_asymmetry.ASYMMETRY_RANGE, p_a)
+print("Measure:", a0,"+",sigmas[1],"-", sigmas[0])
 
 #Compare the results between frequentist (vertical line) and Bayesian (distribution)
 plt.plot(galaxy_asymmetry.ASYMMETRY_RANGE, p_a, 'k-', label = "Bayesian")
