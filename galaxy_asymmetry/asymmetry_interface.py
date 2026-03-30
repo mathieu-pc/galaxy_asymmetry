@@ -15,6 +15,7 @@ ASYMMETRY_RANGE = np.arange(0, 1 + 1 / ASYMMETRY_RESOLUTION, 1 / ASYMMETRY_RESOL
 @quantity_input(beam_FWHM = units.pixel)
 def _get_beam_factor(beam_FWHM):
 	beam_f = (np.copy(beam_FWHM) / units.pixel).decompose().value
+	beam_f *= np.sqrt(2 * np.pi) / (2 * np.sqrt(2 * np.log(2)))
 	beam_f[beam_f < 1] = 1
 	beam_f = np.prod(beam_f)
 	return beam_f
