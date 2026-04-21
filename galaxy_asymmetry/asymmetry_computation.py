@@ -15,6 +15,31 @@ def _calculate_chi_prod(x, X, N):
 	return pXx
 
 
+def compute_single_pair_asymmetry_probability(a, X,Y):
+	"""
+	Calculate asymmetry probability distribution for a single pair.
+
+	Parameters
+	----------
+	a: array
+		asymmetry values to evaluate p(a|X,Y) for
+	X:
+		denominator defined as sqrt(Q / sigma^2)
+	Y:
+		numerator defined as sqrt(P / sigma^2)
+	Returns
+	-------
+	PA: array (float)
+		probability distribution function evaluated at a for domain a
+	"""
+	L = 1+a**2
+	A = Y/X
+	coefficient = X ** 2 / 2 / L
+	pdf = 1/np.sqrt(L) * (np.exp(-coefficient * (a - A) ** 2) + np.exp(-coefficient * (a + A) ** 2))
+	pdf /= np.sum(pdf)
+	return pdf
+
+
 def compute_asymmetry_probability_multi(a, X, Y, N, n_m = 4000, step = 0.01):
 	n_a = len(a)
 	xCenter = np.sqrt(X ** 2 - N)
