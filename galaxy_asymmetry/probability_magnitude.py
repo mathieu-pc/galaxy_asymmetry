@@ -3,6 +3,7 @@ Compute the noncentral chi square distribution
 This is essentially a wrapper for scipy.stats.ncx2
 """
 from scipy.stats import ncx2
+import numpy as np
 
 def noncentral(x, X, degrees_of_freedom):
 	return 2 * X * np.exp(ncx2.logpdf(X ** 2, nc = x ** 2, df = degrees_of_freedom))
