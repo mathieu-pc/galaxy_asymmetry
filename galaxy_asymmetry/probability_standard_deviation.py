@@ -10,7 +10,11 @@ def get_mean_standard_deviations(x, p_x):
 
 
 def _get_standard_deviations_from_centering(centering, x, p_x):
-	assert (np.abs(np.sum(p_x)- 1) < 1e-5)
+	#assert (np.abs(np.sum(p_x)- 1) < 1e-5)
+	if np.abs(np.sum(p_x)- 1) > 1e-5:
+		print("Something wrong with probabilties")
+		print("prob sum is", np.sum(p_x))
+		exit()
 	x0 = centering(x, p_x)
 	return x0, _get_standard_deviations(x, p_x, x0)
 
